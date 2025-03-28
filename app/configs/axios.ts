@@ -1,7 +1,8 @@
 import type { CreateAxiosDefaults } from "axios"
+import { SPOTIFY_API_URL } from "~/constants"
 
 const config: CreateAxiosDefaults = {
-    baseURL: process.env.SPOTIFY_API_URL
+    baseURL: SPOTIFY_API_URL
 }
 
 export default config

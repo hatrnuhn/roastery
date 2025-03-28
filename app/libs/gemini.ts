@@ -1,6 +1,6 @@
 import { GenerativeModel, GoogleGenerativeAI } from "@google/generative-ai";
 import { safetySettings } from "~/configs/gemini";
-import { MODEL } from "~/constants";
+import { GEMINI_API_KEY, MODEL } from "~/constants";
 
 export class GeminiLibrary {
     private model: GenerativeModel
@@ -22,4 +22,4 @@ export class GeminiLibrary {
     }
 }
 
-export default new GeminiLibrary(process.env.GEMINI_API_KEY!, MODEL)
+export default new GeminiLibrary(GEMINI_API_KEY, MODEL)

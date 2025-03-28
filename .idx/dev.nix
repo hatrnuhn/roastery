@@ -1,6 +1,7 @@
 # Import secrets
 let 
   secrets = import ./.secrets.nix;
+  env = import ./.env.nix;
 in
 # To learn more about how to use Nix to configure your environment
 # see: https://developers.google.com/idx/guides/customize-idx-env
@@ -26,7 +27,6 @@ in
   
   # Sets environment variables in the workspace
   # Uses secrets var
-  env = pkgs.lib.recursiveUpdate {} secrets;
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
@@ -50,14 +50,7 @@ in
             "$PORT"
           ];
           manager = "web";
-          env = {
-            # Environment variables to set for your server
-            PORT = "$PORT";
-            REDIS_HOST= "localhost";
-            REDIS_PORT= "6379";
-            SPOTIFY_API_URL="https://api.spotify.com/v1";
-            SPOTIFY_AUTH_URL="https://accounts.spotify.com/api/token";
-          };
+          env = pkgs.lib.recursiveUpdate secrets env // { PORT = "$PORT"; };
         };
       };
     };

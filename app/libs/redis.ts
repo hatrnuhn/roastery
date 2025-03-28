@@ -1,11 +1,12 @@
 import { createClient } from "redis";
+import { REDIS_HOST, REDIS_PORT } from "~/constants";
 
 export const newClient = async () => {
     const client = createClient(
         {
             socket: {
-                host: process.env.REDIS_HOST,
-                port: parseInt(process.env.REDIS_PORT!)
+                host: REDIS_HOST,
+                port: parseInt(REDIS_PORT)
             }
         }
     )

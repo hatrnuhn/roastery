@@ -1,6 +1,7 @@
 import axios, { AxiosError, type AxiosInstance } from "axios";
 import config from "../configs/axios";
 import type { CustomAxiosConfig } from "~/types/axios";
+import { SPOTIFY_AUTH_URL, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from "~/constants";
 
 class CustomAxios {
     private axiosInstance: AxiosInstance
@@ -56,7 +57,7 @@ class CustomAxios {
 }
 
 export default new CustomAxios(
-    process.env.SPOTIFY_CLIENT_ID!,
-    process.env.SPOTIFY_CLIENT_SECRET!,
-    process.env.SPOTIFY_AUTH_URL!
+    SPOTIFY_CLIENT_ID,
+    SPOTIFY_CLIENT_SECRET,
+    SPOTIFY_AUTH_URL
 ).axios

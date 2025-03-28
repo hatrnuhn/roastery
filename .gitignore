@@ -9,3 +9,4 @@
 /.idx/*
 !/.idx/.secrets.nix.example
 !/.idx/dev.nix
+!/.idx/.env.nix
