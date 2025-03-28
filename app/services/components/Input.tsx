@@ -10,7 +10,7 @@ export const Input: FC<InputProps> = ({}) => {
     const [errorMsg, setErrorMsg] = useState('')
     const inputRef = useRef<HTMLInputElement>(null)
     const submit = useSubmit()
-    const {language, setLanguage, busy, setBusy} = useOutletContext<AppContext>()
+    const { language, setLanguage } = useOutletContext<AppContext>()
 
     const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         setinput(() => e.target.value)
@@ -62,9 +62,7 @@ export const Input: FC<InputProps> = ({}) => {
                     action: '/spotify',
                     method: 'POST'
                 }
-            )
-            
-            setBusy(true)
+            )            
         }
     }
 

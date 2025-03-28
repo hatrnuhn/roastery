@@ -5,6 +5,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useNavigation,
+  type Navigation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -45,15 +47,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export type AppContext = {
   language: "EN" | "ID"
   setLanguage: (language: "EN" | "ID") => void
-  busy: boolean
-  setBusy: (busy: boolean) => void
+  navigation: Navigation
 }
 
 export default function App() {
   const [language, setLanguage] = useState<'EN' | 'ID'>('EN')
-  const [busy, setBusy] = useState(false)
+  const navigation = useNavigation()
 
-  return <Outlet context={{language, setLanguage, busy, setBusy}}/>;
+  return <Outlet context={{ language, setLanguage, navigation }}/>;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

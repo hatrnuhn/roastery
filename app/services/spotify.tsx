@@ -19,7 +19,6 @@ export async function action({
     let input = formData.get('input') as string
     const language = formData.get('language') as "EN" | "ID"
 
-    
     try {
         // Validates playlist ID from input
         const isValidPlaylistId = new RegExp('^[a-zA-Z0-9_-]{22}$').test(input);
@@ -64,11 +63,10 @@ export async function clientAction({
 }
 
 export default function ServiceRouteComponent({
-    loaderData,
-    actionData
+    loaderData
 }: Route.ComponentProps) {
     const divRef = useRef<HTMLDivElement>(null)
-    const {busy, setBusy} = useOutletContext<AppContext>()
+    const { navigation } = useOutletContext<AppContext>()
 
     useEffect(() => {
         if (divRef.current)
@@ -77,17 +75,12 @@ export default function ServiceRouteComponent({
             })
     })
 
-    useEffect(() => {
-        if (actionData)
-            setBusy(false)
-    }, [actionData])
-
     return (
         <>
             {loaderData && loaderData.map((r, i) => (
                 <RoastBlock roast={r} errorMsg="" key={i} playlistId={r.playlistId}/>
             ))}
-            {busy && <RoastBlock roast={undefined} errorMsg=""/>}
+            {navigation.state !== 'idle' && <RoastBlock roast={undefined} errorMsg=""/>}
             <div ref={divRef}/>
         </>
     )
@@ -99,7 +92,7 @@ export function ErrorBoundary({
     actionData
 }: Route.ErrorBoundaryProps) {
     const divRef = useRef<HTMLDivElement>(null)
-    const {busy, setBusy} = useOutletContext<AppContext>()
+    const { navigation } = useOutletContext<AppContext>()
 
     useEffect(() => {
         if (divRef.current)
@@ -107,12 +100,6 @@ export function ErrorBoundary({
                 behavior: 'smooth'
             })
     })
-
-    useEffect(() => {
-        if (actionData || error)
-            setBusy(false)
-
-    }, [actionData, error])
 
     return (
         <>
@@ -122,7 +109,7 @@ export function ErrorBoundary({
             <RoastBlock errorMsg={isRouteErrorResponse(error) 
                 ? error.data 
                 : error instanceof Error && error.message} />
-            {busy && <RoastBlock roast={undefined} errorMsg=""/>}
+            {navigation.state !== 'idle' && <RoastBlock roast={undefined} errorMsg=""/>}
             <div ref={divRef}/>
         </>
     );
