@@ -4,7 +4,7 @@ import history from "~/libs/history";
 import RoastBlock from "./components/RoastBlock";
 import { AxiosError } from "axios";
 import { useEffect, useRef } from "react";
-import { useOutletContext } from "react-router";
+import { useOutletContext, data, isRouteErrorResponse } from "react-router";
 import type { AppContext } from "~/root";
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
@@ -28,24 +28,19 @@ export async function action({
             // Generates new roast and returns it
             return await roastService.createSpotifyPlaylistRoast(input, language)
         else 
-            throw new AxiosError(`${input} is not a valid playlist ID`, '400')
+            throw data(`${input} is not a valid playlist ID`, { status: 400 })
     } catch (err) {
         if (err instanceof AxiosError) {
             switch (err.response?.status) {
                 case 400:
-                    throw err
+                    throw data(`${input} is not a valid playlist ID`, { status: 400 })
                 case 404:
-                    err.message = `Playlist with ID ${input} could not be found, make sure it's made public`
-                    throw err
+                    throw data(`Playlist with ID ${input} could not be found, make sure it's made public`, { status: 404 })
                 case 429:
-                    err.message = 'Too many requests'
-                    throw err
+                    throw data('Too many requests', { status: 429 })
                 default: 
-                    err.message = 'Could not generate, try again'
-                    throw err
+                    throw data('Could not generate, try again', { status: err.status })
             }
-        } else {
-            throw new Error('Could not generate, try again')
         }
     }
 }
@@ -54,16 +49,16 @@ export async function clientAction({
     serverAction    
 }: Route.ClientActionArgs) {
     // Retrieves serverAction data
-    const data = await serverAction()
+    const serverActionData = await serverAction()
 
     // Retrieves history data
     const roasts = await history.get()
 
     // If history is null, creates new, else pushes
     if (!roasts)
-        await history.set([data])
+        await history.set([serverActionData!])
     else 
-        await history.set([...roasts, data])
+        await history.set([...roasts, serverActionData!])
 
     return data
 }
@@ -124,7 +119,9 @@ export function ErrorBoundary({
             {loaderData && loaderData.map((r, i) => (
                 <RoastBlock roast={r} errorMsg="" key={i} playlistId={r.playlistId}/>
             ))}
-            {error instanceof Error && <RoastBlock errorMsg={error.message} />}
+            <RoastBlock errorMsg={isRouteErrorResponse(error) 
+                ? error.data 
+                : error instanceof Error && error.message} />
             {busy && <RoastBlock roast={undefined} errorMsg=""/>}
             <div ref={divRef}/>
         </>

@@ -19,6 +19,8 @@ in
     # pkgs.nodePackages.nodemon
   ];
 
+  env = pkgs.lib.recursiveUpdate secrets env;
+
   # Runs redis service
   services.redis = {
     enable = true;
