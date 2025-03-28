@@ -1,0 +1,11 @@
+.DS_Store
+/node_modules/
+
+# React Router
+/.react-router/
+/build/
+
+# IDX development environment
+/.idx/*
+!/.idx/.secrets.nix.example
+!/.idx/dev.nix
