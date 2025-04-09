@@ -11,7 +11,8 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
+import { ThemeProvider, createTheme, useColorScheme } from "@mui/material/styles";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -24,7 +25,22 @@ export const links: Route.LinksFunction = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
+  // Material icons
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/icon?family=Material+Icons"
+  }
 ];
+
+const theme = createTheme({
+  colorSchemes: {
+    // light is set too true by default
+    dark: true
+  },
+  palette: {
+    
+  }
+})
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -36,7 +52,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <ThemeProvider
+          theme={theme}
+        >
+          {children}
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -53,6 +73,19 @@ export type AppContext = {
 export default function App() {
   const [language, setLanguage] = useState<'EN' | 'ID'>('EN')
   const navigation = useNavigation()
+  const { setMode } = useColorScheme()
+
+  useLayoutEffect(() => {
+    // mode from useColorScheme is always undefined first
+    // So we'd get data from localStorage then set it
+    const muiMode = localStorage.getItem('mui-mode')
+
+    if (muiMode)
+      setMode(muiMode as 'dark' | 'light')
+    else
+      setMode(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+
+  }, [setMode])
 
   return <Outlet context={{ language, setLanguage, navigation }}/>;
 }

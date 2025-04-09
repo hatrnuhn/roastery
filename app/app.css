@@ -8,8 +8,6 @@
 
 html,
 body {
-  @apply dark:bg-dark-grey dark:text-white bg-white text-dark-grey;
-
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }

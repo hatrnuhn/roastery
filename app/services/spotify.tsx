@@ -7,6 +7,13 @@ import { useEffect, useRef } from "react";
 import { useOutletContext, data, isRouteErrorResponse } from "react-router";
 import type { AppContext } from "~/root";
 
+export function meta({ }: Route.MetaArgs) {
+    return [
+        { title: "Roastery: Spotify Playlist" },
+        { name: "Roast A Spotify Playlist", content: "Welcome to ya favourite Roastery! " },
+    ];
+}  
+
 export async function clientLoader({}: Route.ClientLoaderArgs) {
     return await history.get()
 }

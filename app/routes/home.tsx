@@ -2,13 +2,13 @@ import type { Route } from "./+types/home";
 
 export function meta({ }: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Roastery" },
+    { name: "Roast everything", content: "Welcome to ya favourite Roastery!" },
   ];
 }
 
 export default function Home() {
-  return <div>
-    homey
-  </div>;
+  return <>
+    <a href="/spotify">Spotify Playlist</a>
+  </>;
 }
